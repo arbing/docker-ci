@@ -73,4 +73,4 @@ RUN apk add tzdata
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh && /usr/local/bin/mvn-entrypoint.sh"]
-CMD []
+CMD ["mvn"]
