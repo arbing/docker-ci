@@ -64,5 +64,4 @@ RUN echo "Asia/Shanghai" > /etc/timezone
 RUN apk add tzdata
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD [ "node" ]
