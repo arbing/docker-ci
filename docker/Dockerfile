@@ -1,8 +1,5 @@
-# https://github.com/nodejs/docker-node/blob/master/10/alpine/Dockerfile
-FROM node:lts-alpine
+FROM alpine:3.8
 
-# --- Begin docker ---
-# from https://github.com/docker-library/docker/blob/master/18.09/Dockerfile
 RUN apk add --no-cache \
 		ca-certificates
 
@@ -51,18 +48,3 @@ COPY docker-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["sh"]
-# --- End docker ---
-
-# --- Begin docker:git ---
-# from https://github.com/docker-library/docker/blob/master/18.09/git/Dockerfile
-RUN apk add --no-cache \
-		git \
-		openssh-client
-# --- End docker:git ---
-
-RUN echo "Asia/Shanghai" > /etc/timezone
-RUN apk add tzdata
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD [ "node" ]
