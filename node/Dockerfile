@@ -73,9 +73,9 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
 CMD [ "node" ]
 # --- End node ---
 
-echo "Asia/Shanghai" > /etc/timezone
-apk add tzdata
-ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo "Asia/Shanghai" > /etc/timezone
+RUN apk add tzdata
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh && /usr/local/bin/mvn-entrypoint.sh"]
 CMD []
