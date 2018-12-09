@@ -68,4 +68,5 @@ ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
 CMD ["mvn"]
 # --- End maven ---
 
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["mvn"]
