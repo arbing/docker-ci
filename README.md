@@ -2,6 +2,13 @@
 
 docker-ci
 
+[![Stars](https://img.shields.io/github/stars/arbing/docker-ci.svg?label=Stars&style=social)](https://github.com/arbing/docker-ci)
+[![Docker Automated build](https://img.shields.io/docker/automated/arbing/docker-ci.svg)](https://hub.docker.com/r/arbing/docker-ci)
+
+[![docker-ci:node](https://images.microbadger.com/badges/version/arbing/docker-ci:node.svg)![MicroBadger](https://images.microbadger.com/badges/image/arbing/docker-ci:node.svg)](https://microbadger.com/images/arbing/docker-ci:node)
+
+[![docker-ci:node-maven](https://images.microbadger.com/badges/version/arbing/docker-ci:node-maven.svg)![MicroBadger](https://images.microbadger.com/badges/image/arbing/docker-ci:node-maven.svg)](https://microbadger.com/images/arbing/docker-ci:node-maven)
+
 ## 镜像列表
 
 - arbing/docker-ci:node
@@ -24,7 +31,6 @@ docker-ci
 - openjdk:8-jdk https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile
 
 - maven:3.6-openjdk-8 https://github.com/carlossg/docker-maven/blob/master/openjdk-8/Dockerfile
-
 
 ## Windows 下修改文件权限
 
