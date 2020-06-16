@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eu
 
+# from https://github.com/docker-library/docker/blob/master/19.03/modprobe.sh
 # "modprobe" without modprobe
 # https://twitter.com/lucabruno/status/902934379835662336
 
