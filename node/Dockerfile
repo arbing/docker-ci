@@ -6,9 +6,9 @@ FROM node:lts-alpine
 # FROM alpine:3.12
 
 RUN apk add --no-cache \
-		ca-certificates \
-# DOCKER_HOST=ssh://... -- https://github.com/docker/cli/pull/1014
-		openssh-client
+	ca-certificates \
+	# DOCKER_HOST=ssh://... -- https://github.com/docker/cli/pull/1014
+	openssh-client
 
 # set up nsswitch.conf for Go's "netgo" implementation (which Docker explicitly uses)
 # - https://github.com/docker/docker-ce/blob/v17.09.0-ce/components/engine/hack/make.sh#L149
@@ -24,29 +24,29 @@ ENV DOCKER_VERSION 19.03.11
 
 RUN set -eux; \
 	\
-# this "case" statement is generated via "update.sh"
+	# this "case" statement is generated via "update.sh"
 	apkArch="$(apk --print-arch)"; \
 	case "$apkArch" in \
-# amd64
-		x86_64) dockerArch='x86_64' ;; \
-# arm32v6
-		armhf) dockerArch='armel' ;; \
-# arm32v7
-		armv7) dockerArch='armhf' ;; \
-# arm64v8
-		aarch64) dockerArch='aarch64' ;; \
-		*) echo >&2 "error: unsupported architecture ($apkArch)"; exit 1 ;;\
+	# amd64
+	x86_64) dockerArch='x86_64' ;; \
+	# arm32v6
+	armhf) dockerArch='armel' ;; \
+	# arm32v7
+	armv7) dockerArch='armhf' ;; \
+	# arm64v8
+	aarch64) dockerArch='aarch64' ;; \
+	*) echo >&2 "error: unsupported architecture ($apkArch)"; exit 1 ;;\
 	esac; \
 	\
 	if ! wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/${dockerArch}/docker-${DOCKER_VERSION}.tgz"; then \
-		echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
-		exit 1; \
+	echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
+	exit 1; \
 	fi; \
 	\
 	tar --extract \
-		--file docker.tgz \
-		--strip-components 1 \
-		--directory /usr/local/bin/ \
+	--file docker.tgz \
+	--strip-components 1 \
+	--directory /usr/local/bin/ \
 	; \
 	rm docker.tgz; \
 	\
@@ -73,7 +73,7 @@ CMD ["sh"]
 # from https://github.com/docker-library/docker/blob/master/19.03/git/Dockerfile
 # FROM docker:19.03
 
-RUN apk add --no-cache git
+RUN apk add --no-cache git curl
 # --- End docker:git ---
 
 RUN echo "Asia/Shanghai" > /etc/timezone
