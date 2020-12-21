@@ -9,10 +9,13 @@ docker-ci
 
 [![docker-ci:node-maven](https://images.microbadger.com/badges/version/arbing/docker-ci:node-maven.svg)![MicroBadger](https://images.microbadger.com/badges/image/arbing/docker-ci:node-maven.svg)](https://microbadger.com/images/arbing/docker-ci:node-maven)
 
+[![docker-ci:node-python](https://images.microbadger.com/badges/version/arbing/docker-ci:node-python.svg)![MicroBadger](https://images.microbadger.com/badges/image/arbing/docker-ci:node-python.svg)](https://microbadger.com/images/arbing/docker-ci:node-python)
+
 ## 镜像列表
 
 - arbing/docker-ci:node
 - arbing/docker-ci:node-maven
+- arbing/docker-ci:node-python
 
 ## 基础镜像
 
@@ -31,6 +34,8 @@ docker-ci
 - openjdk:8-jdk https://github.com/docker-library/openjdk/blob/master/8/jdk/Dockerfile
 
 - maven:3.6-openjdk-8 https://github.com/carlossg/docker-maven/blob/master/openjdk-8/Dockerfile
+
+- python:3.7-alpine https://github.com/docker-library/python/blob/master/3.7/alpine3.12/Dockerfile
 
 ## Windows 下修改文件权限
 
