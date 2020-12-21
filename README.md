@@ -11,11 +11,14 @@ docker-ci
 
 [![docker-ci:node-python](https://images.microbadger.com/badges/version/arbing/docker-ci:node-python.svg)![MicroBadger](https://images.microbadger.com/badges/image/arbing/docker-ci:node-python.svg)](https://microbadger.com/images/arbing/docker-ci:node-python)
 
+[![docker-ci:opencv-python](https://images.microbadger.com/badges/version/arbing/docker-ci:opencv-python.svg)![MicroBadger](https://images.microbadger.com/badges/image/arbing/docker-ci:opencv-python.svg)](https://microbadger.com/images/arbing/docker-ci:opencv-python)
+
 ## 镜像列表
 
 - arbing/docker-ci:node
 - arbing/docker-ci:node-maven
 - arbing/docker-ci:node-python
+- arbing/docker-ci:opencv-python
 
 ## 基础镜像
 
