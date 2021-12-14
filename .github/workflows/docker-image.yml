@@ -15,9 +15,9 @@ jobs:
       - name: Build the Docker image
         run: |
           cd node
-          docker build . --file Dockerfile --tag ${DOCKER_REGISTRY}/docker-ci-node:latest
-          echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u ${DOCKER_REGISTRY_USER} --password-stdin ${DOCKER_REGISTRY}
-          docker push ${DOCKER_REGISTRY}/docker-ci-node:latest
+          docker build . --file Dockerfile --tag arbing/docker-ci-node:latest
+          echo "${DOCKER_REGISTRY_PASSWORD}" | docker login -u ${DOCKER_REGISTRY_USER} --password-stdin
+          docker push arbing/docker-ci-node:latest
         env:
           DOCKER_REGISTRY: ${{secrets.DOCKER_REGISTRY}}
           DOCKER_REGISTRY_USER: ${{secrets.DOCKER_REGISTRY_USER}}
