@@ -1,7 +1,8 @@
 #!/bin/sh
 set -eu
 
-# from https://github.com/docker-library/docker/blob/master/19.03/docker-entrypoint.sh
+# from https://github.com/docker-library/docker/blob/master/20.10/docker-entrypoint.sh
+
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then
 	set -- docker "$@"
@@ -46,15 +47,10 @@ fi
 
 if [ "$1" = 'dockerd' ]; then
 	cat >&2 <<-'EOW'
-
 		📎 Hey there!  It looks like you're trying to run a Docker daemon.
-
 		   You probably should use the "dind" image variant instead, something like:
-
 		     docker run --privileged --name some-docker ... docker:dind ...
-
 		   See https://hub.docker.com/_/docker/ for more documentation and usage examples.
-
 	EOW
 	sleep 3
 fi

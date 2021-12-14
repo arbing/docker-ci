@@ -1,14 +1,16 @@
-# from https://github.com/nodejs/docker-node/blob/master/12/alpine3.11/Dockerfile
+# from https://github.com/nodejs/docker-node
 FROM node:lts-alpine
 
 # --- Begin docker ---
-# from https://github.com/docker-library/docker/blob/master/19.03/Dockerfile
-# FROM alpine:3.12
+# from https://github.com/docker-library/docker/blob/master/20.10/Dockerfile
+# FROM alpine:3.14
 
 RUN apk add --no-cache \
-	ca-certificates \
-	# DOCKER_HOST=ssh://... -- https://github.com/docker/cli/pull/1014
-	openssh-client
+		ca-certificates \
+# Workaround for golang not producing a static ctr binary on Go 1.15 and up https://github.com/containerd/containerd/issues/5824
+		libc6-compat \
+# DOCKER_HOST=ssh://... -- https://github.com/docker/cli/pull/1014
+		openssh-client
 
 # set up nsswitch.conf for Go's "netgo" implementation (which Docker explicitly uses)
 # - https://github.com/docker/docker-ce/blob/v17.09.0-ce/components/engine/hack/make.sh#L149
@@ -16,37 +18,36 @@ RUN apk add --no-cache \
 # - docker run --rm debian:stretch grep '^hosts:' /etc/nsswitch.conf
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
-ENV DOCKER_CHANNEL stable
-ENV DOCKER_VERSION 19.03.11
+ENV DOCKER_VERSION 20.10.12
 # TODO ENV DOCKER_SHA256
 # https://github.com/docker/docker-ce/blob/5b073ee2cf564edee5adca05eee574142f7627bb/components/packaging/static/hash_files !!
 # (no SHA file artifacts on download.docker.com yet as of 2017-06-07 though)
 
 RUN set -eux; \
 	\
-	# this "case" statement is generated via "update.sh"
 	apkArch="$(apk --print-arch)"; \
 	case "$apkArch" in \
-	# amd64
-	x86_64) dockerArch='x86_64' ;; \
-	# arm32v6
-	armhf) dockerArch='armel' ;; \
-	# arm32v7
-	armv7) dockerArch='armhf' ;; \
-	# arm64v8
-	aarch64) dockerArch='aarch64' ;; \
-	*) echo >&2 "error: unsupported architecture ($apkArch)"; exit 1 ;;\
+		'x86_64') \
+			url='https://download.docker.com/linux/static/stable/x86_64/docker-20.10.12.tgz'; \
+			;; \
+		'armhf') \
+			url='https://download.docker.com/linux/static/stable/armel/docker-20.10.12.tgz'; \
+			;; \
+		'armv7') \
+			url='https://download.docker.com/linux/static/stable/armhf/docker-20.10.12.tgz'; \
+			;; \
+		'aarch64') \
+			url='https://download.docker.com/linux/static/stable/aarch64/docker-20.10.12.tgz'; \
+			;; \
+		*) echo >&2 "error: unsupported architecture ($apkArch)"; exit 1 ;; \
 	esac; \
 	\
-	if ! wget -O docker.tgz "https://download.docker.com/linux/static/${DOCKER_CHANNEL}/${dockerArch}/docker-${DOCKER_VERSION}.tgz"; then \
-	echo >&2 "error: failed to download 'docker-${DOCKER_VERSION}' from '${DOCKER_CHANNEL}' for '${dockerArch}'"; \
-	exit 1; \
-	fi; \
+	wget -O docker.tgz "$url"; \
 	\
 	tar --extract \
-	--file docker.tgz \
-	--strip-components 1 \
-	--directory /usr/local/bin/ \
+		--file docker.tgz \
+		--strip-components 1 \
+		--directory /usr/local/bin/ \
 	; \
 	rm docker.tgz; \
 	\
@@ -70,14 +71,16 @@ CMD ["sh"]
 # --- End docker ---
 
 # --- Begin docker:git ---
-# from https://github.com/docker-library/docker/blob/master/19.03/git/Dockerfile
-# FROM docker:19.03
+# from https://github.com/docker-library/docker/blob/master/20.10/git/Dockerfile
+# FROM docker:20.10
 
-RUN apk add --no-cache git curl
+RUN apk add --no-cache git
 # --- End docker:git ---
 
 RUN echo "Asia/Shanghai" > /etc/timezone
 RUN apk add tzdata
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+RUN npm install -g pnpm
 
 CMD [ "node" ]
