@@ -1,5 +1,5 @@
 # 使用CentOS最新官方镜像
-FROM centos:7.9.2009
+FROM quay.io/centos/centos:stream9
 
 # 安装基础工具
 RUN yum update -y && \
