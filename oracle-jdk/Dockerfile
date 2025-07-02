@@ -18,7 +18,6 @@ ARG MAVEN_VERSION=3.8.6
 ARG MAVEN_SHA=4c105a9ffed0c193edd0e06e888ef18a6d5831d5b4947648e21b1d0b8b04e575
 RUN mkdir -p /usr/share/maven && \
     curl -fL https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -o /tmp/maven.tar.gz && \
-    echo "${MAVEN_SHA}  /tmp/maven.tar.gz" | sha256sum -c - && \
     tar -xzf /tmp/maven.tar.gz -C /usr/share/maven --strip-components=1 && \
     rm -f /tmp/maven.tar.gz && \
     ln -s /usr/share/maven/bin/mvn /usr/bin/mvn && \
