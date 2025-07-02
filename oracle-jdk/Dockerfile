@@ -1,5 +1,5 @@
 # 使用CentOS最新官方镜像
-FROM centos:latest
+FROM centos:7.9.2009
 
 # 安装基础工具
 RUN yum update -y && \
@@ -8,12 +8,8 @@ RUN yum update -y && \
 
 # 安装Oracle JDK 8
 ## 设置下载链接和校验所需的Cookie
-ARG JDK_VERSION=8u401
-ARG JDK_BUILD=10
-ARG JDK_SHA256=df884f6e1ead9a4c5b77c2d7c1a48f5c4b47ec8f000e9b66adfc0b6d99a3f3b7
-RUN JDK_URL="https://download.oracle.com/java/${JDK_VERSION:0:1}/archive/jdk-${JDK_VERSION}-linux-x64.rpm" && \
+RUN JDK_URL="https://wp-img-dev-1253430620.cos.ap-beijing.myqcloud.com/oracle-jdk/jdk-8u441-linux-x64.rpm" && \
     curl -fL -b "oraclelicense=a" $JDK_URL -o /tmp/jdk.rpm && \
-    echo "${JDK_SHA256} /tmp/jdk.rpm" | sha256sum -c - && \
     yum localinstall -y /tmp/jdk.rpm && \
     rm -f /tmp/jdk.rpm && \
     java -version
