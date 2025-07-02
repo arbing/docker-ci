@@ -1,8 +1,6 @@
-FROM coding-public-docker.pkg.coding.net/public/docker/openjdk:8u342-2024.03
-
 # https://github1s.com/io-sgr/docker-java-oracle/blob/java8/alpine/jdk/Dockerfile
 # --- Begin oracle-jdk ---
-# FROM alpine:latest
+FROM alpine:latest
 MAINTAINER SgrAlpha <admin@mail.sgr.io>
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle \
@@ -37,3 +35,15 @@ RUN GLIBC_VERSION=2.28-r0 && \
     mkdir -p /usr/lib/jvm && mv /tmp/jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE} "${JAVA_HOME}" && \
     rm -rf /tmp/* /var/cache/apk/*
 # --- End oracle-jdk ---
+
+# 安装Git和SSH客户端（用于代码仓库访问）
+RUN apk add --no-cache git openssh-client
+
+# 安装Maven
+ARG MAVEN_VERSION=3.9.6
+ENV MAVEN_HOME=/usr/lib/maven
+ENV PATH="${MAVEN_HOME}/bin:${PATH}"
+
+RUN curl -Ls https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    | tar -C /usr/lib -xz && \
+    ln -s /usr/lib/apache-maven-${MAVEN_VERSION} ${MAVEN_HOME}
