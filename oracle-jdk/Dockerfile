@@ -1,44 +1,48 @@
-# https://github1s.com/io-sgr/docker-java-oracle/blob/java8/alpine/jdk/Dockerfile
-# --- Begin oracle-jdk ---
-FROM ubuntu:latest
-MAINTAINER SgrAlpha <admin@mail.sgr.io>
+# 使用 Alpine Linux 最新版作为基础镜像
+FROM alpine:latest
 
-ENV DEBIAN_FRONTEND=noninteractive \
-    JAVA_HOME=/usr/lib/jvm/java-8-oracle \
-    JRE_HOME=/usr/lib/jvm/java-8-oracle/jre
+# 安装依赖工具
+RUN apk add --no-cache --update \
+    bash \
+    curl \
+    tar
 
-RUN VERSION=8 && \
-    UPDATE=202 && \
-    BUILD=08 && \
-    SIG=1961070e4c9b4e26a04e7f5a083f551e && \
-    apt-get update && apt-get dist-upgrade -y && \
-    apt-get install apt-utils ca-certificates curl -y --no-install-recommends && \
-    curl --silent --location --retry 3 --cacert /etc/ssl/certs/GeoTrust_Global_CA.pem \
-        --header "Cookie: oraclelicense=accept-securebackup-cookie;" \
-        http://download.oracle.com/otn-pub/java/jdk/"${VERSION}"u"${UPDATE}"-b"${BUILD}"/"${SIG}"/jdk-"${VERSION}"u"${UPDATE}"-linux-x64.tar.gz \
-        | tar xz -C /tmp && \
-    mkdir -p /usr/lib/jvm && mv /tmp/jdk1.${VERSION}.0_${UPDATE} "${JAVA_HOME}" && \
-    apt-get autoclean && apt-get --purge -y autoremove && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    update-alternatives --install "/usr/bin/java" "java" "${JRE_HOME}/bin/java" 1 && \
-    update-alternatives --install "/usr/bin/javaws" "javaws" "${JRE_HOME}/bin/javaws" 1 && \
-    update-alternatives --install "/usr/bin/javac" "javac" "${JAVA_HOME}/bin/javac" 1 && \
-    update-alternatives --set java "${JRE_HOME}/bin/java" && \
-    update-alternatives --set javaws "${JRE_HOME}/bin/javaws" && \
-    update-alternatives --set javac "${JAVA_HOME}/bin/javac"
-# --- End oracle-jdk ---
+# 安装 Git
+RUN apk add --no-cache git
 
-# 安装Git和SSH客户端
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    openssh-client \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# 安装 Oracle JDK 8
+ENV JAVA_VERSION=8u241 \
+    JAVA_BUILD=08 \
+    JAVA_HASH=1f5b5a87ca1f74154c96462b4bd67e0a \
+    JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
-# 安装Maven
-ARG MAVEN_VERSION=3.9.6
-ENV MAVEN_HOME=/opt/maven
-ENV PATH="${MAVEN_HOME}/bin:${PATH}"
+# 下载并安装 Oracle JDK 8（使用官方二进制包）
+RUN curl -jkSLH "Cookie: oraclelicense=accept-securebackup-cookie" \
+    "https://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION}-b${JAVA_BUILD}/${JAVA_HASH}/jdk-${JAVA_VERSION}-linux-x64.tar.gz" \
+    | tar -xzf - -C /tmp && \
+    mkdir -p /usr/lib/jvm && \
+    mv /tmp/jdk1.8.0_241 "$JAVA_HOME" && \
+    apk add --no-cache --virtual .java-runtime \
+        libstdc++ \
+        ca-certificates && \
+    update-ca-certificates
 
-RUN mkdir -p ${MAVEN_HOME} && \
-    curl -Ls https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
-    | tar -xz -C ${MAVEN_HOME} --strip-components=1
+# 配置 Java 环境变量
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+# 安装 Maven
+ENV MAVEN_VERSION=3.9.6
+RUN curl -jkSL https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
+    | tar -xzf - -C /usr/share && \
+    mv /usr/share/apache-maven-${MAVEN_VERSION} /usr/share/maven && \
+    ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
+# 设置 Maven 环境变量
+ENV MAVEN_HOME=/usr/share/maven
+
+# 验证安装
+RUN java -version && \
+    mvn --version && \
+    git --version
+
+# 清理临时文件（Alpine 的 apk 缓存已通过 --no-cache 自动清理）
