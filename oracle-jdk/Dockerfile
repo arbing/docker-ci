@@ -2,7 +2,7 @@ FROM coding-public-docker.pkg.coding.net/public/docker/openjdk:8u342-2024.03
 
 # https://github1s.com/io-sgr/docker-java-oracle/blob/java8/alpine/jdk/Dockerfile
 # --- Begin oracle-jdk ---
-FROM alpine:latest
+# FROM alpine:latest
 MAINTAINER SgrAlpha <admin@mail.sgr.io>
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-oracle \
