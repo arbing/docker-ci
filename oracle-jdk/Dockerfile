@@ -1,11 +1,6 @@
 # 使用CentOS最新官方镜像
 FROM quay.io/centos/centos:stream9
 
-# 安装基础工具
-RUN yum update -y && \
-    yum install -y curl tar gzip && \
-    yum clean all
-
 # 安装Oracle JDK 8
 ## 设置下载链接和校验所需的Cookie
 RUN JDK_URL="https://wp-img-dev-1253430620.cos.ap-beijing.myqcloud.com/oracle-jdk/jdk-8u441-linux-x64.rpm" && \
